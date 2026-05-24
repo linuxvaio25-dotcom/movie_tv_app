@@ -127,7 +127,8 @@ const App = () => {
                 <header className='relative'>
                     {/* <img src="./hero.png" alt="Hero Banner" className='hero' /> */}
                     <img src="./film_reel-clipart-1.png" alt="Hero Banner" className='hero' />
-                    <h1>Find <span className='text-gradient'>Movies</span> You'll Enjoy Without the Hassle</h1>
+                    <h1><span className='text-gradient'>MOVIES SEARCH</span></h1> <br />
+                    <h2 className = 'text-center'>Find Movies You'll Enjoy Without the Hassle</h2>
 
                     <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                 </header>
