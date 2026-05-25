@@ -23,7 +23,7 @@ const HoverPreview = ({
         width: 'min(520px, calc(100% - 32px))'
       }}
     >
-      <div className='w-full rounded-[32px] overflow-hidden border border-white/15 shadow-2xl bg-slate-950/95 backdrop-blur-xl'>
+      <div className='w-full rounded-[32px] overflow-hidden border border-white/10 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.65),0_20px_60px_-30px_rgba(0,0,0,0.5)] bg-slate-950/95 backdrop-blur-xl'>
         <div className='flex items-center justify-between gap-4 border-b border-white/10 bg-slate-950/90 px-5 py-3'>
           <div>
             <p className='text-sm text-gray-300'>Preview</p>

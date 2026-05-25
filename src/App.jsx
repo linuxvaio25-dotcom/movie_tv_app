@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import Search from './components/Search'
 import Spinner from './components/Spinner';
 import MovieCard from './components/MovieCard';
@@ -26,6 +27,11 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState();
     const [trendingMovies, setTrendingMovies] = useState([]);
+
+    const { scrollY } = useScroll();
+    const titleY = useTransform(scrollY, [0, 220], [0, -140]);
+    const subtitleY = useTransform(scrollY, [0, 220], [0, -130]);
+    const titleOpacity = useTransform(scrollY, [0, 220], [1, 0.92]);
 
     const {
         hoveredVideoKey,
@@ -125,10 +131,27 @@ const App = () => {
 
             <div className="wrapper">
                 <header className='relative'>
-                    {/* <img src="./hero.png" alt="Hero Banner" className='hero' /> */}
-                    <img src="./film_reel-clipart-1.png" alt="Hero Banner" className='hero' />
-                    <h1><span className='text-gradient'>MOVIES SEARCH</span></h1> <br />
-                    <h2 className = 'text-center'>Find Movies You'll Enjoy Without the Hassle</h2>
+                    <div className='relative mx-auto max-w-lg'>
+                        <img
+                            src="./film_reel-clipart-1.png"
+                            alt="Film Reel Banner"
+                            className='hero relative z-0 w-full h-auto object-contain mx-auto drop-shadow-md'
+                        />
+
+                        <motion.h1
+                            style={{ y: titleY, opacity: titleOpacity }}
+                            className='hero-title relative z-10 mt-8 mx-auto w-fit bg-transparent text-center text-5xl font-bold leading-tight tracking-[-1%] text-white sm:text-[64px] sm:leading-[76px]'
+                        >
+                            <span className='text-gradient'>MOVIES SEARCH</span>
+                        </motion.h1>
+                    </div>
+
+                    <motion.h2
+                        style={{ y: subtitleY, opacity: titleOpacity }}
+                        className='text-center mt-6 text-xl text-white sm:text-2xl'
+                    >
+                        Find Movies You'll Enjoy Without the Hassle
+                    </motion.h2>
 
                     <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                 </header>
