@@ -16,7 +16,9 @@ export function useHoverPreview() {
   const [hoveredVideoSite, setHoveredVideoSite] = useState(null)
   const [hoveredVideoTitle, setHoveredVideoTitle] = useState(null)
   const [hoveredVideoOverview, setHoveredVideoOverview] = useState('')
+  const [hoveredVideoProviders, setHoveredVideoProviders] = useState([])
   const [hoveredVideoLoading, setHoveredVideoLoading] = useState(false)
+  const [hoveredVideoProvidersLoading, setHoveredVideoProvidersLoading] = useState(false)
   const [hoveredVideoCoords, setHoveredVideoCoords] = useState({ x: 0, y: 0 })
   const [previewOpen, setPreviewOpen] = useState(false)
   const videoCache = useRef({})
@@ -29,14 +31,17 @@ export function useHoverPreview() {
     setHoveredVideoOverview(movie.overview || 'No description available')
 
     if (videoCache.current[id]) {
-      const { key, site } = videoCache.current[id]
+      const { key, site, providers } = videoCache.current[id]
       setHoveredVideoKey(key)
       setHoveredVideoSite(site)
+      setHoveredVideoProviders(providers || [])
       setHoveredVideoLoading(false)
+      setHoveredVideoProvidersLoading(false)
       return
     }
 
     setHoveredVideoLoading(true)
+    setHoveredVideoProvidersLoading(true)
 
     try {
       const resp = await fetch(`${API_BASE_URL}/movie/${id}/videos?language=en-US`, API_OPTIONS)
@@ -54,19 +59,52 @@ export function useHoverPreview() {
 
       if (preferred) {
         const { key, site } = preferred
-        videoCache.current[id] = { key, site }
         setHoveredVideoKey(key)
         setHoveredVideoSite(site)
+        videoCache.current[id] = { key, site, providers: [] }
       } else {
         setHoveredVideoKey(null)
         setHoveredVideoSite(null)
+        videoCache.current[id] = { key: null, site: null, providers: [] }
       }
     } catch (error) {
       console.error('Error fetching movie videos:', error)
       setHoveredVideoKey(null)
       setHoveredVideoSite(null)
+      videoCache.current[id] = { key: null, site: null, providers: [] }
+    }
+
+    try {
+      const providerResp = await fetch(`${API_BASE_URL}/movie/${id}/watch/providers`, API_OPTIONS)
+      if (!providerResp.ok) {
+        throw new Error('Failed to fetch watch providers')
+      }
+
+      const providerData = await providerResp.json()
+      const country = providerData.results?.US || {}
+      const providerEntries = [
+        ...(country.flatrate || []),
+        ...(country.ads || []),
+        ...(country.buy || []),
+        ...(country.rent || [])
+      ]
+      const providers = Array.from(new Set(providerEntries.map(p => p.provider_name)))
+
+      setHoveredVideoProviders(providers)
+      videoCache.current[id] = {
+        ...(videoCache.current[id] || {}),
+        providers
+      }
+    } catch (error) {
+      console.error('Error fetching watch providers:', error)
+      setHoveredVideoProviders([])
+      videoCache.current[id] = {
+        ...(videoCache.current[id] || {}),
+        providers: []
+      }
     } finally {
       setHoveredVideoLoading(false)
+      setHoveredVideoProvidersLoading(false)
     }
   }
 
@@ -75,6 +113,8 @@ export function useHoverPreview() {
     setHoveredVideoSite(null)
     setHoveredVideoTitle(null)
     setHoveredVideoOverview('')
+    setHoveredVideoProviders([])
+    setHoveredVideoProvidersLoading(false)
   }
 
   const handleHoverMove = (event) => {
@@ -96,6 +136,8 @@ export function useHoverPreview() {
     hoveredVideoSite,
     hoveredVideoTitle,
     hoveredVideoOverview,
+    hoveredVideoProviders,
+    hoveredVideoProvidersLoading,
     hoveredVideoLoading,
     hoveredVideoCoords,
     previewOpen,

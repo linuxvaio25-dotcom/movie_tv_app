@@ -38,6 +38,8 @@ const App = () => {
         hoveredVideoSite,
         hoveredVideoTitle,
         hoveredVideoOverview,
+        hoveredVideoProviders,
+        hoveredVideoProvidersLoading,
         hoveredVideoLoading,
         hoveredVideoCoords,
         previewOpen,
@@ -140,9 +142,10 @@ const App = () => {
 
                         <motion.h1
                             style={{ y: titleY, opacity: titleOpacity }}
-                            className='hero-title relative z-10 mt-8 mx-auto w-fit bg-transparent text-center text-5xl font-bold leading-tight tracking-[-1%] text-white sm:text-[64px] sm:leading-[76px]'
+                            className='hero-title relative z-10 mt-4 mx-auto w-fit bg-transparent text-center text-5xl font-bold leading-tight tracking-[-1%] text-white sm:text-[84px] sm:leading-[76px]'
                         >
-                            <span className='text-gradient'>MOVIES SEARCH</span>
+                            <img src="./MOVIE_SEARCH_goldLogo.png" alt="Movie Search" className='w-[18rem] sm:w-[24rem] h-auto object-contain' />
+                            {/* <span className='text-gradient movie-stroke'>MOVIE SEARCH</span> */}
                         </motion.h1>
                     </div>
 
@@ -150,7 +153,7 @@ const App = () => {
                         style={{ y: subtitleY, opacity: titleOpacity }}
                         className='text-center mt-6 text-xl text-white sm:text-2xl'
                     >
-                        Find Movies You'll Enjoy Without the Hassle
+                        Find Movies and Shows currently Streaming on Netflix, Hulu, Prime Video and more.
                     </motion.h2>
 
                     <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
@@ -201,6 +204,8 @@ const App = () => {
                     hoveredVideoCoords={hoveredVideoCoords}
                     hoveredVideoTitle={hoveredVideoTitle}
                     hoveredVideoOverview={hoveredVideoOverview}
+                    hoveredVideoProviders={hoveredVideoProviders}
+                    hoveredVideoProvidersLoading={hoveredVideoProvidersLoading}
                     hoveredVideoLoading={hoveredVideoLoading}
                     hoveredVideoKey={hoveredVideoKey}
                     hoveredVideoSite={hoveredVideoSite}

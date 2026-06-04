@@ -10,6 +10,7 @@ const Search = ({ searchTerm, setSearchTerm }) => {
         <input 
           type="text" 
           placeholder="Search movies..." 
+          autoFocus
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

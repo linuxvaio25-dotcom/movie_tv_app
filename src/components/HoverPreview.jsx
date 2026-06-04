@@ -4,6 +4,8 @@ const HoverPreview = ({
   hoveredVideoCoords,
   hoveredVideoTitle,
   hoveredVideoOverview,
+  hoveredVideoProviders,
+  hoveredVideoProvidersLoading,
   hoveredVideoLoading,
   hoveredVideoKey,
   hoveredVideoSite,
@@ -24,18 +26,19 @@ const HoverPreview = ({
       }}
     >
       <div className='w-full rounded-[32px] overflow-hidden border border-white/10 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.65),0_20px_60px_-30px_rgba(0,0,0,0.5)] bg-slate-950/95 backdrop-blur-xl'>
-        <div className='flex items-center justify-between gap-4 border-b border-white/10 bg-slate-950/90 px-5 py-3'>
+        <div className='flex items-center justify-between gap-4 border-b border-white/10 bg-slate-950/90 px-4 py-2'>
           <div>
-            <p className='text-sm text-gray-300'>Preview</p>
-            <p className='text-lg font-semibold text-white line-clamp-1'>{hoveredVideoTitle || 'Loading clip...'}</p>
+            <p className='text-xs uppercase tracking-[0.2em] text-gray-300'>Preview</p>
+            <p className='mt-1 text-base font-semibold text-white line-clamp-1'>{hoveredVideoTitle || 'Loading clip...'}</p>
           </div>
         </div>
-        <div className='relative h-[320px] bg-slate-950 flex items-center justify-center overflow-hidden'>
+        {/* <div className='relative h-[320px] bg-slate-950 flex items-center justify-center overflow-hidden'> */}
+        <div className='relative h-[520px] bg-slate-950 flex items-center justify-center overflow-hidden'>
           {hoveredVideoLoading ? (
             <p className='text-sm text-gray-300'>Loading preview...</p>
           ) : hoveredVideoKey && hoveredVideoSite === 'YouTube' ? (
             <iframe
-              src={`https://www.youtube.com/embed/${hoveredVideoKey}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&loop=1&playlist=${hoveredVideoKey}&fs=0&disablekb=1`}
+              src={`https://www.youtube.com/embed/${hoveredVideoKey}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&loop=1&playlist=${hoveredVideoKey}&fs=0&disablekb=1`}
               title='Movie clip'
               allow='autoplay; encrypted-media'
               frameBorder='0'
@@ -47,8 +50,19 @@ const HoverPreview = ({
           <div className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/70 to-black/0 px-5 py-4 transition-transform duration-500 ease-out ${previewOpen ? 'translate-y-0' : 'translate-y-full'}`}>
             <div className='absolute inset-0 bg-gradient-to-t from-black/95 via-black/80 to-black/0 pointer-events-none' />
             <div className='relative'>
-              <p className='text-sm text-gray-300'>Description</p>
+              <p className='text-sm font-bold text-gray-300'>Description:</p>
               <p className='mt-2 text-sm leading-6 text-white'>{hoveredVideoOverview}</p>
+
+              <div className='mt-4'>
+                <p className='text-sm font-bold text-gray-300'>Where its streaming:</p>
+                {hoveredVideoProvidersLoading ? (
+                  <p className='mt-2 text-sm text-white'>Loading providers...</p>
+                ) : hoveredVideoProviders && hoveredVideoProviders.length > 0 ? (
+                  <p className='mt-2 text-sm leading-6 text-white'>{hoveredVideoProviders.join(', ')}</p>
+                ) : (
+                  <p className='mt-2 text-sm text-gray-400'>Currently playing in movie theaters. Please check your local cinema listings.</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
