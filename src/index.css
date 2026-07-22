@@ -121,7 +121,7 @@
     @apply p-5 shadow-none;
     background-color: #251f21;
     border: 24px solid transparent;
-    border-image: url('/film_frame7.png') 24 round;
+    border-image: url('/film_frame8.png') 24 round;
     background-clip: padding-box;
 
     & img {
